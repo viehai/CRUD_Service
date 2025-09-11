@@ -6,5 +6,8 @@ import com.viehai.identity_service.entity.User;
 
 @Profile({"mysql", "postgres"})  // chỉ bật khi chạy jpa
 public interface UserRepository extends JpaRepository<User, String> {
+
+
+    boolean existsByUsername(String username);
 }
 

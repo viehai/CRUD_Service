@@ -1,9 +1,11 @@
 package com.viehai.identity_service.controller;
 
+import com.viehai.identity_service.dto.request.ApiResponse;
 import com.viehai.identity_service.dto.request.UserCreateRequest;
 import com.viehai.identity_service.dto.request.UserUpdateRequest;
 import com.viehai.identity_service.entity.User;
 import com.viehai.identity_service.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping()
-    User createUser(@RequestBody UserCreateRequest request){
-        return userService.createUser(request);
+    ApiResponse<User> createUser(@RequestBody @Valid UserCreateRequest request){
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.createUser(request));
+        return apiResponse;
     }
 
     @GetMapping()

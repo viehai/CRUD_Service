@@ -9,11 +9,18 @@ spring:
       port: 27017
       database: identity_service
 
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+    redis:
+      host: localhost
+      port: 6379
+
+  cache:
+    type: redis
+
+autoconfigure:
+  exclude:
+    - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+    - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+    - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
 
 server:
   port: 8080

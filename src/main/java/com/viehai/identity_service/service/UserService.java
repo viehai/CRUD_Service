@@ -3,6 +3,8 @@ package com.viehai.identity_service.service;
 import com.viehai.identity_service.dto.request.UserCreateRequest;
 import com.viehai.identity_service.dto.request.UserUpdateRequest;
 import com.viehai.identity_service.entity.User;
+import com.viehai.identity_service.exeption.AppException;
+import com.viehai.identity_service.exeption.ErrorCode;
 import com.viehai.identity_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -18,6 +20,10 @@ public class UserService {
 
     public User createUser(UserCreateRequest request){
         User user = new User();
+
+        if(userRepository.existsByUsername(request.getUsername()))
+            throw new AppException(ErrorCode.USER_EXISTS);
+
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
         user.setFirstName(request.getFirstName());

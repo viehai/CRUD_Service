@@ -1,16 +1,20 @@
 package com.viehai.identity_service.dto.request;
 
+import com.viehai.identity_service.exeption.ErrorCode;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class UserCreateRequest {
 
-
+    @Size(min = 4, message = "USERNAME_INVALID")
     private String username;
+
+    @Size(min = 8, message = "PASSWORD_INVALID")
     private String password;
     private String firstName;
     private String lastName;
     private LocalDate dob;
-
 
     public String getUsername() {
         return username;
@@ -51,4 +55,5 @@ public class UserCreateRequest {
     public void setDob(LocalDate dob) {
         this.dob = dob;
     }
+
 }
