@@ -1,4 +1,4 @@
-package com.viehai.identity_service.exeption;
+package com.viehai.identity_service.exception;
 
 public enum ErrorCode {
     UNCATEGORISED_ERROR(9999, "Uncategorised error"),

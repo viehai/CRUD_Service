@@ -1,4 +1,4 @@
-package com.viehai.identity_service.exeption;
+package com.viehai.identity_service.exception;
 
 import com.viehai.identity_service.dto.request.ApiResponse;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handlingRunTimeException(RuntimeException exception){
+    ResponseEntity<ApiResponse> handlingRunTimeException(Exception exception){
+        exception.printStackTrace(); // In ra console lỗi gốc
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setCode(ErrorCode.UNCATEGORISED_ERROR.getCode());

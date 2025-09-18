@@ -1,4 +1,4 @@
-package com.viehai.identity_service.exeption;
+package com.viehai.identity_service.exception;
 
 public class AppException extends RuntimeException {
     private ErrorCode errorCode;

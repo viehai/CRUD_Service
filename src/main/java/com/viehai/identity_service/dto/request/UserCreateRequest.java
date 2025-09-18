@@ -1,6 +1,5 @@
 package com.viehai.identity_service.dto.request;
 
-import com.viehai.identity_service.exeption.ErrorCode;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
