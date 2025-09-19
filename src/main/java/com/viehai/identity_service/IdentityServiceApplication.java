@@ -10,11 +10,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableCaching
 @EnableJpaRepositories(basePackages = "com.viehai.identity_service.repository")
 @EnableRedisDocumentRepositories(basePackages = "com.viehai.identity_service.search.repo")
-public class DemoApplication {
+public class IdentityServiceApplication {
 
 	public static void main(String[] args) {
 
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(IdentityServiceApplication.class, args);
 	}
 
 }
