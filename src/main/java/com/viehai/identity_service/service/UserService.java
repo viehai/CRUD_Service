@@ -2,6 +2,8 @@ package com.viehai.identity_service.service;
 
 import com.viehai.identity_service.dto.request.UserCreateRequest;
 import com.viehai.identity_service.dto.request.UserUpdateRequest;
+import com.viehai.identity_service.dto.response.AddressResponse;
+import com.viehai.identity_service.dto.response.JobResponse;
 import com.viehai.identity_service.dto.response.UserResponse;
 import com.viehai.identity_service.entity.User;
 import com.viehai.identity_service.exception.AppException;
@@ -40,10 +42,31 @@ public class UserService {
     }
 
     @Cacheable(value = "allUsers", key = "'all'")
-    public List<User> getUsers(){
-        System.out.println("Querying DB..."); //test
-        return userRepository.findAll();
+    public List<UserResponse> getUsers() {
+        System.out.println("Querying DB...");
+
+        return userRepository.findAll().stream()
+                .map(u -> UserResponse.builder()
+                        .id(u.getId())
+                        .username(u.getUsername())
+                        .firstName(u.getFirstName())
+                        .lastName(u.getLastName())
+                        .dob(u.getDob())
+                        .jobs(u.getJobs().stream()
+                                .map(j -> new JobResponse(j.getId(), j.getCode(), j.getName()))
+                                .toList())
+                        .address(u.getAddress() == null ? null :
+                                new AddressResponse(
+                                        u.getAddress().getId(),
+                                        u.getAddress().getLine1(),
+                                        u.getAddress().getCity(),
+                                        u.getAddress().getCountry()
+                                ))
+                        .build()
+                )
+                .toList();
     }
+
 
     public UserResponse getUser(String id){
         return userMapper.toUserResponse(userRepository.findById(id)

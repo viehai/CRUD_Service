@@ -1,6 +1,6 @@
 package com.viehai.identity_service.controller;
 
-import com.viehai.identity_service.dto.request.ApiResponse;
+import com.viehai.identity_service.dto.response.ApiResponse;
 import com.viehai.identity_service.dto.request.UserCreateRequest;
 import com.viehai.identity_service.dto.request.UserUpdateRequest;
 import com.viehai.identity_service.dto.response.UserResponse;
@@ -10,9 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +33,10 @@ public class UserController {
     }
 
     @GetMapping()
-    List<User> getUsers(){
+    public List<UserResponse> listUsers() {
         return userService.getUsers();
-
     }
+
 
     @GetMapping("/{userId}")
     UserResponse getUser(@PathVariable String userId){

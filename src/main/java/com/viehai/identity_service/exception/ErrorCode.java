@@ -8,6 +8,7 @@ public enum ErrorCode {
     PASSWORD_INVALID(1004, "Password must be at least 8 characters long"),
     INVALID_KEY(1005, "Invalid key"),
     USER_NOT_EXISTED(1006,"User not existed"),
+    JOB_CODE_EXISTS(1007,"Job code already exists"),
     ;
 
     private int code;

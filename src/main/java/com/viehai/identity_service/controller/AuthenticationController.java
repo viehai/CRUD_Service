@@ -1,9 +1,8 @@
 package com.viehai.identity_service.controller;
 
-import com.viehai.identity_service.dto.request.ApiResponse;
+import com.viehai.identity_service.dto.response.ApiResponse;
 import com.viehai.identity_service.dto.request.AuthenticationRequest;
 import com.viehai.identity_service.dto.response.AuthenticationResponse;
-import com.viehai.identity_service.entity.User;
 import com.viehai.identity_service.service.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

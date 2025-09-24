@@ -4,17 +4,18 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserResponse {
     private String id;
     private String username;
-    private String password;
     private String firstName;
     private String lastName;
     private LocalDate dob;
+    private List<JobResponse> jobs;
+    private AddressResponse address;
 }

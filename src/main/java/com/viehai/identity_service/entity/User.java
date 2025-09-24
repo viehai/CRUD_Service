@@ -1,67 +1,49 @@
 package com.viehai.identity_service.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private LocalDate dob;
+    @Column(length = 36) // UUID dạng "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    String id;
 
-    public LocalDate getDob() {
-        return dob;
-    }
+    @Column(nullable = false, unique = true, length = 100)
+    String username;
 
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
+    @Column(nullable = false)
+    String password;
 
-    public String getLastName() {
-        return lastName;
-    }
+    String firstName;
+    String lastName;
+    LocalDate dob;
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    // n–n: users ↔ jobs (bảng nối user_jobs)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_jobs",
+            joinColumns = @JoinColumn(name = "user_id"),           // sẽ là VARCHAR(36)
+            inverseJoinColumns = @JoinColumn(name = "job_id")      // sẽ là BIGINT
+    )
+    private Set<Job> jobs = new LinkedHashSet<>();
 
-    public String getFirstName() {
-        return firstName;
-    }
+    // 1–1: users.address_id -> addresses.id
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id", unique = true)
+    Address address;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 }
