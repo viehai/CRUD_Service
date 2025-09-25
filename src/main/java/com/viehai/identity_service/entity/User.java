@@ -19,7 +19,7 @@ import java.util.Set;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(length = 36) // UUID dạng "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    @Column(length = 36) //
     String id;
 
     @Column(nullable = false, unique = true, length = 100)

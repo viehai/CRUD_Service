@@ -10,12 +10,13 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    private String id;
-    private String username;
-    private String firstName;
-    private String lastName;
-    private LocalDate dob;
-    private List<JobResponse> jobs;
-    private AddressResponse address;
+    String id;
+    String username;
+    String firstName;
+    String lastName;
+    LocalDate dob;
+    List<JobResponse> jobs;
+    AddressResponse address;
 }

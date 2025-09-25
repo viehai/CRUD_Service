@@ -17,15 +17,13 @@ public class Address {
     Long id;
 
     @Column(nullable = false)
-    String line1;
-    String line2;
+    String line;
+
     String ward;
-    String district;
 
     @Column(nullable = false)
     String city;
-    @Column(nullable = false)
-    String country = "VN";
-    String postalCode;
 
+    @Column(nullable = false)
+    String country;
 }

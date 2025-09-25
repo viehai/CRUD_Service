@@ -1,10 +1,15 @@
 package com.viehai.identity_service.controller;
 
 import com.viehai.identity_service.dto.request.AddressRequest;
+import com.viehai.identity_service.dto.request.UserJobsReplaceRequest;
 import com.viehai.identity_service.dto.response.AddressResponse;
 import com.viehai.identity_service.dto.response.JobResponse;
 import com.viehai.identity_service.service.UserRelationService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,18 +17,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@Profile({"mysql","postgres"})
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserRelationController {
 
-    private final UserRelationService service;
-
-    public UserRelationController(UserRelationService service) {
-        this.service = service;
-    }
+    UserRelationService service;
 
     // Replace toàn bộ jobs
     @PutMapping("/{id}/jobs")
-    public ResponseEntity<Void> replaceJobs(@PathVariable("id") String id, @RequestBody List<Long> jobIds) {
-        service.replaceJobs(id, jobIds);
+    public ResponseEntity<Void> replaceJobs(@PathVariable String id,
+                                            @RequestBody UserJobsReplaceRequest req) {
+        service.replaceJobs(id, req.getJobIds());
         return ResponseEntity.noContent().build();
     }
 

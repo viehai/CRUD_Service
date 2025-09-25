@@ -10,11 +10,16 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddressRequest {
-    @NotBlank @Size(max = 255) String line1;
-    @Size(max = 255) String line2;
-    @Size(max = 100) String ward;
-    @Size(max = 100) String district;
-    @NotBlank @Size(max = 100) String city;
-    @Size(max = 100) String country = "VN";
-    @Size(max = 20)  String postalCode;
+    @NotBlank @Size(max = 255)
+    String line;
+
+    @Size(max = 100)
+    String ward;
+
+    @NotBlank @Size(max = 100)
+    String city;
+
+    @NotBlank @Size(max = 100)
+    String country;
+
 }

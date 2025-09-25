@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 public class AddressResponse {
     private Long id;
-    private String line1;
+    private String line;
     private String city;
     private String country;
 }

@@ -55,7 +55,7 @@ public class UserRelationService {
         copy(a, req);
         u.setAddress(a);          // owner side
         userRepo.save(u);         // cascade sẽ persist/merge Address & update users.address_id
-        return new AddressResponse(a.getId(), a.getLine1(), a.getCity(), a.getCountry());
+        return new AddressResponse(a.getId(), a.getLine(), a.getCity(), a.getCountry());
     }
 
     @Transactional
@@ -84,7 +84,7 @@ public class UserRelationService {
         if (a == null) return null;
         AddressResponse res = new AddressResponse();
         res.setId(a.getId());
-        res.setLine1(a.getLine1());
+        res.setLine(a.getLine());
 
         res.setCity(a.getCity());
         res.setCountry(a.getCountry());
@@ -94,12 +94,9 @@ public class UserRelationService {
 
     // copy dto -> entity (đơn giản)
     private void copy(Address a, AddressRequest req) {
-        a.setLine1(req.getLine1());
-        a.setLine2(req.getLine2());
+        a.setLine(req.getLine());
         a.setWard(req.getWard());
-        a.setDistrict(req.getDistrict());
         a.setCity(req.getCity());
         a.setCountry(req.getCountry() == null ? "VN" : req.getCountry());
-        a.setPostalCode(req.getPostalCode());
     }
 }
