@@ -28,6 +28,9 @@ public class User implements Serializable {
     @Column(nullable = false)
     String password;
 
+    @Column(unique = true, length = 255)
+    String email;
+
     String firstName;
     String lastName;
     LocalDate dob;
@@ -39,6 +42,7 @@ public class User implements Serializable {
             joinColumns = @JoinColumn(name = "user_id"),           // sẽ là VARCHAR(36)
             inverseJoinColumns = @JoinColumn(name = "job_id")      // sẽ là BIGINT
     )
+    @Builder.Default
     private Set<Job> jobs = new LinkedHashSet<>();
 
     // 1–1: users.address_id -> addresses.id
