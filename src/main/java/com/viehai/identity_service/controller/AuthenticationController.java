@@ -3,7 +3,6 @@ package com.viehai.identity_service.controller;
 import com.viehai.identity_service.dto.response.ApiResponse;
 import com.viehai.identity_service.dto.request.AuthenticationRequest;
 import com.viehai.identity_service.dto.response.AuthenticationResponse;
-import com.viehai.identity_service.entity.User;
 import com.viehai.identity_service.service.AuthenticationService;
 import com.viehai.identity_service.service.OAuth2Service;
 import lombok.AccessLevel;
@@ -26,9 +25,9 @@ public class AuthenticationController {
 
     @PostMapping("/log-in")
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
-       boolean result = authenticationService.authenticate(request);
+       AuthenticationResponse result = authenticationService.authenticate(request);
        return ApiResponse.<AuthenticationResponse>builder()
-               .result(AuthenticationResponse.builder().authenticated(result).build())
+               .result(result)
                .build();
     }
 
@@ -39,20 +38,11 @@ public class AuthenticationController {
     }
 
     @GetMapping("/oauth2/success")
-    ApiResponse<Map<String, Object>> oauth2Success(@AuthenticationPrincipal OAuth2User oauth2User) {
-        User user = oAuth2Service.processOAuth2User(oauth2User);
+    ApiResponse<AuthenticationResponse> oauth2Success(@AuthenticationPrincipal OAuth2User oauth2User) {
+        AuthenticationResponse result = oAuth2Service.processOAuth2User(oauth2User);
         
-        return ApiResponse.<Map<String, Object>>builder()
-                .result(Map.of(
-                    "authenticated", true,
-                    "user", Map.of(
-                        "id", user.getId(),
-                        "username", user.getUsername(),
-                        "email", user.getEmail(),
-                        "firstName", user.getFirstName(),
-                        "lastName", user.getLastName()
-                    )
-                ))
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
                 .build();
     }
 

@@ -1,6 +1,8 @@
 package com.viehai.identity_service.service;
 
+import com.viehai.identity_service.dto.response.AuthenticationResponse;
 import com.viehai.identity_service.entity.User;
+import com.viehai.identity_service.enums.Role;
 import com.viehai.identity_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,20 +17,23 @@ import java.util.Optional;
 public class OAuth2Service {
     
     UserRepository userRepository;
+    JwtService jwtService;
     
-    public User processOAuth2User(OAuth2User oAuth2User) {
+    public AuthenticationResponse processOAuth2User(OAuth2User oAuth2User) {
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
         
         // Check if user exists by email
         Optional<User> existingUser = userRepository.findByEmail(email);
         
+        User user;
         if (existingUser.isPresent()) {
-            User user = existingUser.get();
+            user = existingUser.get();
             if (user.getUsername() == null || user.getUsername().isEmpty()) {
                 user.setUsername(email);
             }
-            return userRepository.save(user);
+            // Keep existing role
+            user = userRepository.save(user);
         } else {
             User newUser = User.builder()
                 .email(email)
@@ -36,10 +41,20 @@ public class OAuth2Service {
                 .firstName(extractFirstName(name))
                 .lastName(extractLastName(name))
                 .password("")
+                .role(Role.USER) // Set default role as USER for new Google users
                 .build();
             
-            return userRepository.save(newUser);
+            user = userRepository.save(newUser);
         }
+        
+        String token = jwtService.generateToken(user);
+        
+        return AuthenticationResponse.builder()
+                .authenticated(true)
+                .token(token)
+                .userId(user.getId())
+                .username(user.getUsername())
+                .build();
     }
     
     private String extractFirstName(String fullName) {

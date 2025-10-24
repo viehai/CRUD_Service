@@ -3,6 +3,7 @@ package com.viehai.identity_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import com.viehai.identity_service.enums.Role;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -50,4 +51,8 @@ public class User implements Serializable {
     @JoinColumn(name = "address_id", unique = true)
     Address address;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    Role role = Role.USER; // Default role is USER
 }

@@ -1,7 +1,10 @@
 package com.viehai.identity_service.bootstrap;
 
 import com.viehai.identity_service.entity.Job;
+import com.viehai.identity_service.entity.User;
+import com.viehai.identity_service.enums.Role;
 import com.viehai.identity_service.repository.JobRepository;
+import com.viehai.identity_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.AccessLevel;
@@ -23,9 +26,16 @@ public class DevDataSeeder implements ApplicationRunner {
 
     JobRepository jobRepository;
 
+    UserRepository userRepository;
+
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
+        seedJobs();
+        seedAdminUser();
+    }
+
+    private void seedJobs() {
         if (jobRepository.count() == 0) {
             jobRepository.saveAll(List.of(
                     Job.builder().code("SE").name("Software Engineer").build(),
@@ -34,6 +44,20 @@ public class DevDataSeeder implements ApplicationRunner {
             log.info("Seeded jobs: SE, PM");
         } else {
             log.info("Jobs already present: {}", jobRepository.count());
+        }
+    }
+
+    private void seedAdminUser() {
+        String adminEmail = "admin@example.com";
+        if (userRepository.findByEmail(adminEmail).isEmpty()) {
+            User admin = User.builder()
+                    .email(adminEmail)
+                    .username("admin")
+                    .password("$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG")
+                    .role(Role.ADMIN)
+                    .build();
+            userRepository.save(admin);
+            log.info("Created admin user: {}", adminEmail);
         }
     }
 }
