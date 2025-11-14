@@ -1,5 +1,6 @@
 package com.viehai.identity_service.service;
 
+import com.viehai.identity_service.config.SecurityConfig;
 import com.viehai.identity_service.dto.request.UserCreateRequest;
 import com.viehai.identity_service.dto.request.UserUpdateRequest;
 import com.viehai.identity_service.dto.response.AddressResponse;
@@ -18,6 +19,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +48,7 @@ public class UserService {
         User u = userMapper.toUser(req);
         u.setPassword(new BCryptPasswordEncoder(10).encode(req.getPassword()));
 
-        // ✅ address optional
+
         if (req.getAddress() != null) {
             var ar = req.getAddress();
             Address a = new Address();
@@ -56,7 +59,7 @@ public class UserService {
             u.setAddress(a);
         }
 
-        // ✅ jobs optional
+
         if (req.getJobIds() != null && !req.getJobIds().isEmpty()) {
             var jobs = jobRepository.findAllById(req.getJobIds());
             if (jobs.size() != req.getJobIds().size()) throw new AppException(ErrorCode.JOB_NOT_FOUND);
@@ -66,9 +69,8 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(u));
     }
 
-
-
     // READ (list) - cacheable
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional(readOnly = true)
     @Cacheable(value = "allUsers", key = "'all'")
     public List<UserResponse> getUsers() {
@@ -115,6 +117,16 @@ public class UserService {
         userMapper.updateUser(user, request); // chú ý cấu hình MapStruct bỏ qua null nếu cần
 
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    // Get my info
+    @Transactional
+    public UserResponse getMyInfo(){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.toUserResponse(user);
     }
 
     // DELETE

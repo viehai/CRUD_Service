@@ -43,6 +43,13 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/myInfo")
+    public ApiResponse<UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<ApiResponse<UserResponse>> getUser(@PathVariable String userId) {
         UserResponse data = userService.getUser(userId);

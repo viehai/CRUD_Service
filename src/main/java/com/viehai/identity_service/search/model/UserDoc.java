@@ -1,43 +1,44 @@
 package com.viehai.identity_service.search.model;
 
-import com.redis.om.spring.annotations.Document;
-import com.redis.om.spring.annotations.Indexed;
-import com.redis.om.spring.annotations.Searchable;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
 import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(indexName = "users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDoc {
     @Id
     String id;
 
-    @Indexed
+    @Field(type = FieldType.Keyword)
     String username;      // lọc chính xác
-    @Searchable
+    @Field(type = FieldType.Text)
     String firstName;     // full-text
-    @Searchable
+    @Field(type = FieldType.Text)
     String lastName;      // full-text
     
 
-    @Searchable
+    @Field(type = FieldType.Text)
     String line;
-    @Searchable
+    @Field(type = FieldType.Text)
     String ward;
-    @Searchable
+    @Field(type = FieldType.Text)
     String city;
-    @Indexed
+    @Field(type = FieldType.Keyword)
     String country;
     
 
-    @Indexed
+    @Field(type = FieldType.Keyword)
     List<String> jobCodes;
-    @Searchable
+    @Field(type = FieldType.Text)
     List<String> jobNames;
 }
